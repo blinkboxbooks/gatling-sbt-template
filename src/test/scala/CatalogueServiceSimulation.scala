@@ -55,19 +55,13 @@ val scheme = "http"
 // Data files
 // http://gatling.io/docs/2.1.1/session/feeder.html
 
-val DATA_HOME ="/opt/gatling/"
-
-//val DATA_HOME = scala.util.Properties.envOrElse("DATA_HOME", {
-//      throw new IllegalStateException("You must specify DATA_HOME !")
-//    })
-
-val book = csv(DATA_HOME+"data/books.csv").circular
-val book2 = csv(DATA_HOME+"data/books2.csv").circular
-val category = csv(DATA_HOME+"data/categories.csv").circular
-val contributor = csv(DATA_HOME+"data/contributors.csv").circular
-val promotion = csv(DATA_HOME+"data/promotions.csv").circular
-val publisher = csv(DATA_HOME+"data/publishers.csv").circular
-val slug = csv(DATA_HOME+"data/slugs.csv").circular
+val book = csv("books.csv").circular
+val book2 = csv("books2.csv").circular
+val category = csv("categories.csv").circular
+val contributor = csv("contributors.csv").circular
+val promotion = csv("promotions.csv").circular
+val publisher = csv("publishers.csv").circular
+val slug = csv("slugs.csv").circular
 
 
 // ---------------------
