@@ -74,8 +74,7 @@ val slug = csv("slugs.csv").circular
 
 val req_catalogue_get_book_prices = feed(book).feed(book2).exec(http("catalogue_get_book_prices") .get(scheme+"://"+host+":"+port+"/service/catalogue/prices?book=${book}&book=${book2}").check(status.is(200)))
 val req_catalogue_get_books_for_category = feed(category).exec(http("catalogue_get_books_for_category") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?category=${category}").check(status.is(200)))
-val req_catalogue_get_books_for_contributor = feed(contributor).exec(http("catalogue_get_books_contributor") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?contributor=${contributor}") )
-//.check(status.is(200)))
+val req_catalogue_get_books_for_contributor = feed(contributor).exec(http("catalogue_get_books_contributor") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?contributor=${contributor}").check(status.is(200)))
 val req_catalogue_get_books_for_promotion = feed(promotion).exec(http("catalogue_get_books_for_promotion") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?promotion=${promotion}&order=SEQUENTIAL").check(status.is(200)))
 val req_catalogue_get_books_for_publisher = feed(publisher).exec(http("catalogue_get_books_for_publisher") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?publisher=${publisher}").check(status.is(200)))
 val req_catalogue_get_bulk_books = feed(book).feed(book2).exec(http("catalogue_get_bulk_books") .get(scheme+"://"+host+":"+port+"/service/catalogue/books?id=${book}&id=${book2}").check(status.is(200)))
@@ -166,7 +165,7 @@ val upsRate = 0.5
 // the time it takes to gradually increase from start to max load
 val rampDuration =60 
 // the duration of the "steady state"
-val testDuration =600 
+val testDuration =600
 
  setUp(
 
@@ -190,9 +189,8 @@ scn_req_catalogue_get_non_recommended_categories.inject(rampUsersPerSec(initUPS)
 scn_req_catalogue_get_publishers.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf),
 scn_req_catalogue_get_recommended_categories.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf),
 scn_req_catalogue_get_related_book_for_isbn.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf),
-scn_req_catalogue_get_synopsis.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf),
-//.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf),
+scn_req_catalogue_get_synopsis.inject(rampUsersPerSec(initUPS) to(upsRate) during(rampDuration seconds),constantUsersPerSec(upsRate) during(testDuration minutes) ) .protocols(httpConf)
 
-scn_req_pingpong.inject(atOnceUsers(1))
+//scn_req_pingpong.inject(atOnceUsers(1))
 )
 }
