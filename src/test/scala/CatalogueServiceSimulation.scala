@@ -7,51 +7,28 @@ import scala.language.postfixOps
 
 class CatalogueServiceSimulation extends Simulation {
 
+  // -----------------------
+  // http://jira.blinkbox.local/confluence/display/BBBOPS/Environment+Overview
+
+  val host = "harris.blinkbox.local"
+  val port = "7001"
+  val scheme = "http"
+  val path = "/service/catalogue/"
+  val catalogueURL = scheme + "://" + host + ":" + port + path
+
   // Various HTTP config
   // http://gatling.io/docs/2.1.1/http/http_protocol.html
 
   val httpConf = http
     .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
     .doNotTrackHeader("1")
-    //.connection("keep-alive")
     .connection("close")
     .acceptLanguageHeader("en-US,en;q=0.5")
     .acceptEncodingHeader("gzip, deflate")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
     .disableCaching
     .shareConnections
-
-  val headers_10 = Map("Content-Type" -> """application/x-www-form-urlencoded""") // Note the headers specific to a given request
-
-  val headers_5 = Map( """Accept""" -> """text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8""",
-    """Content-Type""" -> """application/x-www-form-urlencoded""")
-
-  // Example of multiple source addresses... or setting the source ip of the test requests
-  // when the load injector has more than one interface
-  //  val httpConf1 = httpConf.localAddress(java.net.InetAddress.getByName("192.168.1.100"))
-  //  val httpConf2 = httpConf.localAddress(java.net.InetAddress.getByName("192.168.1.101"))
-
-  // -----------------------
-  // http://jira.blinkbox.local/confluence/display/BBBOPS/Environment+Overview
-
-  // -- Local dev :
-  //val host = "172.17.190.27"
-  //val port = "7001"
-  //val scheme = "http"
-
-  val host = "harris.blinkbox.local"
-  val port = "7001"
-  val scheme = "http"
-  val path = "/service/catalogue/"
-  val baseUrl = scheme + "://" + host + ":" + port + path
-
-  //val host = "api.dev.bbbtest2.com"
-  //val port = "443"
-  //val scheme = "https"
-
-  //val host =   "api.qa.bbbtest2.com"
-  //val port =   "443"
-  //val scheme = "https"
+    .baseURL(catalogueURL)
 
   // -------------------
   // Data files
@@ -73,26 +50,26 @@ class CatalogueServiceSimulation extends Simulation {
   // val req_<service>_<http method>_<uri path> = http("name: <service>_<http method>_<uri path>")
   //                                                .<get/post/etc>(scheme+"://"+host+":"+port+"").check(status.is(200))
 
-  val reqGetBookPrices = feed(book).feed(book2).exec(http("getBookPrices").get(baseUrl + "prices?book=${book}&book=${book2}").check(status.is(200)))
-  val reqGetBooksForCategory = feed(category).exec(http("getBooksForCategory").get(baseUrl + "books?category=${category}").check(status.is(200)))
-  val reqGetBooksForContributor = feed(contributor).exec(http("getBooksContributor").get(baseUrl + "books?contributor=${contributor}").check(status.is(200)))
-  val reqGetBooksForPromotion = feed(promotion).exec(http("getBooksForPromotion").get(baseUrl + "books?promotion=${promotion}&order=SEQUENTIAL").check(status.is(200)))
-  val reqGetBooksForPublisher = feed(publisher).exec(http("getBooksForPublisher").get(baseUrl + "books?publisher=${publisher}").check(status.is(200)))
-  val reqGetBulkBooks = feed(book).feed(book2).exec(http("getBulkBooks").get(baseUrl + "books?id=${book}&id=${book2}").check(status.is(200)))
-  val reqGetCategories = http("getCategories").get(baseUrl + "categories").check(status.is(200))
-  val reqGetCategoryBySlug = feed(slug).exec(http("getCategoryBySlug").get(baseUrl + "categories?slug=${slug}").check(status.is(200)))
-  val reqGetIndividualBook = feed(book).exec(http("getIndividualBook").get(baseUrl + "books/${book}").check(status.is(200)))
-  val reqGetIndividualCategory = feed(category).exec(http("getIndividualCategory").get(baseUrl + "categories/${category}").check(status.is(200)))
-  val reqGetIndividualContributor = feed(contributor).exec(http("getIndividualContributor").get(baseUrl + "contributors/${contributor}").check(status.is(200)))
-  val reqGetIndividualPublisher = feed(publisher).exec(http("getIndividualPublisher").get(baseUrl + "publishers/${publisher}").check(status.is(200)))
-  val reqGetNonRecommendedCategories = http("getNonRecommendedCategories").get(baseUrl + "categories?recommended=false").check(status.is(200))
-  val reqGetPublishers = http("getPublishers").get(baseUrl + "publishers").check(status.is(200))
-  val reqGetRecommendedCategories = http("getRecommendedCategories").get(baseUrl + "categories?recommended=true").check(status.is(200))
-  val reqGetRelatedBookForIsbn = feed(book).exec(http("getRelatedBookForIsbn").get(baseUrl + "books/${book}/related").check(status.is(200)))
-  val reqGetSynopsis = feed(book).exec(http("getSynopsis").get(baseUrl + "books/${book}/synopsis").check(status.is(200)))
+  val reqGetBookPrices = feed(book).feed(book2).exec(http("getBookPrices").get("prices?book=${book}&book=${book2}").check(status.is(200)))
+  val reqGetBooksForCategory = feed(category).exec(http("getBooksForCategory").get("books?category=${category}").check(status.is(200)))
+  val reqGetBooksForContributor = feed(contributor).exec(http("getBooksContributor").get("books?contributor=${contributor}").check(status.is(200)))
+  val reqGetBooksForPromotion = feed(promotion).exec(http("getBooksForPromotion").get("books?promotion=${promotion}&order=SEQUENTIAL").check(status.is(200)))
+  val reqGetBooksForPublisher = feed(publisher).exec(http("getBooksForPublisher").get("books?publisher=${publisher}").check(status.is(200)))
+  val reqGetBulkBooks = feed(book).feed(book2).exec(http("getBulkBooks").get("books?id=${book}&id=${book2}").check(status.is(200)))
+  val reqGetCategories = http("getCategories").get("categories").check(status.is(200))
+  val reqGetCategoryBySlug = feed(slug).exec(http("getCategoryBySlug").get("categories?slug=${slug}").check(status.is(200)))
+  val reqGetIndividualBook = feed(book).exec(http("getIndividualBook").get("books/${book}").check(status.is(200)))
+  val reqGetIndividualCategory = feed(category).exec(http("getIndividualCategory").get("categories/${category}").check(status.is(200)))
+  val reqGetIndividualContributor = feed(contributor).exec(http("getIndividualContributor").get("contributors/${contributor}").check(status.is(200)))
+  val reqGetIndividualPublisher = feed(publisher).exec(http("getIndividualPublisher").get("publishers/${publisher}").check(status.is(200)))
+  val reqGetNonRecommendedCategories = http("getNonRecommendedCategories").get("categories?recommended=false").check(status.is(200))
+  val reqGetPublishers = http("getPublishers").get("publishers").check(status.is(200))
+  val reqGetRecommendedCategories = http("getRecommendedCategories").get("categories?recommended=true").check(status.is(200))
+  val reqGetRelatedBookForIsbn = feed(book).exec(http("getRelatedBookForIsbn").get("books/${book}/related").check(status.is(200)))
+  val reqGetSynopsis = feed(book).exec(http("getSynopsis").get("books/${book}/synopsis").check(status.is(200)))
 
   // could be useful to include healthcheck requests for various reasons - this will only be available on Dev and DevInt.......
-  val reqPingpong = http("pingpong").get(scheme + "://" + host + ":" + port + "/health/ping").headers(headers_5).check(status.is(200))
+  val reqPingpong = http("pingpong").get(scheme + "://" + host + ":" + port + "/health/ping").check(status.is(200))
 
   // ----------------------------
   // scenarios: this defines what requests a user will make
@@ -188,6 +165,6 @@ class CatalogueServiceSimulation extends Simulation {
     scnReqGetRelatedBookForIsbn.inject(rampUsersPerSec(initUPS) to (upsRate) during (rampDuration seconds), constantUsersPerSec(upsRate) during (testDuration minutes)).protocols(httpConf),
     scnReqGetSynopsis.inject(rampUsersPerSec(initUPS) to (upsRate) during (rampDuration seconds), constantUsersPerSec(upsRate) during (testDuration minutes)).protocols(httpConf)
 
-    //scn_req_pingpong.inject(atOnceUsers(1))
+    //scnReqPingpong.inject(atOnceUsers(1))
   )
 }
