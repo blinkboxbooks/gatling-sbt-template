@@ -1,9 +1,0 @@
-
-select isbn from dat_book  limit 30000;
-select isbn from dat_book where isbn>9780307590084 limit 30000;
-select id from dat_category where sequence is not null;
-select guid from dat_contributor where guid != '';
-select id from dat_promotion where deactivated is null;
-select id from dat_publisher;
-select name_key as SLUG from dat_category where sequence is not null;
-
