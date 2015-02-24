@@ -13,7 +13,7 @@ Tweak the test parameters directly in [ServiceSimulation.scala](/src/test/scala/
 
 Gatling configuration can be modified in [gatling.conf](/src/test/resources/gatling.conf)
 
-## Contributors (@ blinkbox books 2015:
+## Contributors (blinkbox books 2015):
 * [Alex Bagehot](https://github.com/ceeaspb)
 * Jay McCure
 * David Owen
